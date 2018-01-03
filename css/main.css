@@ -28,6 +28,10 @@ body {
   display: none;
 }
 
+.wrong-input {
+  border-color: #e16567;
+}
+
 /* Фильтры */
 
 .filters {
@@ -289,6 +293,8 @@ body {
 
 .effect-image-preview {
   vertical-align: middle;
+
+  transform: scale(0.55);
 }
 
 .upload-effect-controls input[type=radio] {
@@ -709,6 +715,9 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
   font-size: 45px;
   text-align: center;
   color: #ffffff;
+
+  background-color: transparent;
+  border: none;
 
   cursor: pointer;
 }

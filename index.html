@@ -25,21 +25,22 @@
 </form>
 
 <form class="upload-form" id="upload-select-image" method="post"
-      enctype="multipart/form-data"
+      enctype="multipart/form-data" action="https://js.dump.academy/kekstagram"
       autocomplete="off">
   <div class="upload-image">
-    <input type="file" id="upload-file" class="upload-input" name="filename" required>
+    <input type="file" id="upload-file" class="upload-input" name="filename" tabindex="0" required>
     <label class="upload-file upload-control" for="upload-file"></label>
   </div>
 
-  <div class="upload-overlay  hidden">
+  <div class="upload-overlay hidden">
     <div class="upload-effect">
       <div class="upload-effect__container">
         <fieldset class="upload-resize-controls">
           <button type="button"
                   class="upload-resize-control upload-resize-controls-button upload-resize-controls-button-dec">–
           </button><!--
-          --><input type="text" class="upload-resize-control upload-resize-controls-value" value="55%" readonly title="Image Scale" name="scale"/><!--
+          --><input type="text" class="upload-resize-control upload-resize-controls-value" value="55%" min="25%"
+                    max="100%" step="25%" readonly title="Image Scale" name="scale"/><!--
           --><button type="button"
                   class="upload-resize-control upload-resize-controls-button upload-resize-controls-button-inc">+
           </button>
@@ -97,7 +98,8 @@
 
         <input class="upload-form-hashtags" name="hashtags" placeholder="#хэш-тег">
 
-        <textarea class="upload-form-description" name="description" placeholder="Ваш комментарий..."></textarea>
+        <textarea class="upload-form-description" name="description" placeholder="Ваш комментарий..."
+                  maxlength="140"></textarea>
 
         <button class="upload-form-cancel" type="reset" id="upload-cancel"></button>
         <button class="upload-form-submit" type="submit" id="upload-submit">Отправить</button>
@@ -136,8 +138,8 @@
 </footer>
 
 
-<div class="gallery-overlay">
-  <span class="gallery-overlay-close">&times;</span>
+<div class="gallery-overlay hidden">
+  <button class="gallery-overlay-close" tabindex="0">&times;</button>
   <div class="gallery-overlay-preview">
     <img src="" class="gallery-overlay-image" alt="">
     <div class="gallery-overlay-controls">
