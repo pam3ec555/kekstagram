@@ -381,6 +381,8 @@ input[type=radio]:checked + .upload-effect-label .upload-effect-preview {
   border-radius: 50%;
   transform: translateX(-50%);
   cursor: move;
+
+  transition: all 0.1s;
 }
 
 .upload-effect-level-val {
