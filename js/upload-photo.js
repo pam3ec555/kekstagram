@@ -109,6 +109,11 @@
         var effectControls = uploadOverlay.querySelector('.upload-effect-controls');
         var resizeControls = uploadOverlay.querySelector('.upload-resize-controls');
         var hashField = uploadOverlay.querySelector('.upload-form-hashtags');
+        var pinControl = uploadOverlay.querySelector('#effect-range');
+
+        if (pinControl) {
+            pinControl.removeEventListener('input', window.filterDragUploadPreview.onPinControlRange);
+        }
 
         if (hashField) {
             hashField.removeEventListener('change', window.validateHashField.checkHashField);

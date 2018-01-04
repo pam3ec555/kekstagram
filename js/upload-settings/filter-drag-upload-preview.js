@@ -2,11 +2,22 @@
 
 (function () {
 
+    /**
+     * Максимальное значени ползунка
+     * @type {number}
+     * @const
+     */
     var MAX_RANGE_VALUE = 100;
     
     window.filterDragUploadPreview = {
+        /**
+         * {{}} Объект, хранящий состояние фильтров
+         */
         filterRange: {},
-        controlWidth: 0,
+        /**
+         * Метод, инициализирующий обработку событий на ползунке для фильтра
+         * @param uploadOverlay
+         */
         initDragControl: function (uploadOverlay) {
             var controlPin = uploadOverlay.querySelector('#effect-range');
 
@@ -14,9 +25,17 @@
                 controlPin.addEventListener('input', window.filterDragUploadPreview.onPinControlRange);
             }
         },
+        /**
+         * Метод, срабатывающий при изменении состоянии ползунка
+         * @param e {Event}
+         */
         onPinControlRange: function (e) {
             setFilter(e.target);
         },
+        /**
+         * Метод, устанавливающий нужное состояние для фильтров, в зависимости от выбранного фильтра
+         * @param {string} className Имя класса выбранного фильтра
+         */
         setMinMaxEffectSize: function (className) {
             var filterDrag = window.filterDragUploadPreview;
             var pin = document.querySelector('#effect-range');
@@ -56,6 +75,10 @@
         }
     };
 
+    /**
+     * Метод, устанавливающий нужный эффект в зависимости от состояния ползунка
+     * @param pin Ползунок
+     */
     function setFilter(pin) {
         var preview = document.querySelector('.effect-image-preview');
         var filterDrag = window.filterDragUploadPreview;
