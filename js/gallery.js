@@ -12,30 +12,30 @@
          * Overlay галлереи
          * @type {Element | null}
          */
-        this.gallery = document.querySelector('.gallery-overlay');
+        var gallery = document.querySelector('.gallery-overlay');
 
         /**
          * Обертка для картинок
          * @type {Element | null}
          */
-        this.picturesWrap = document.querySelector('.pictures');
+        var picturesWrap = document.querySelector('.pictures');
 
         /**
          * Кнопка закрытия галлереи
          * @type {(ElementTagNameMap[string] | null) | (Element | null)}
          */
-        this.closeButton = this.gallery.querySelector('.gallery-overlay-close');
+        var closeButton = gallery.querySelector('.gallery-overlay-close');
 
         /**
          * Метод, передающий данные о картинке в галлерею
          * @param data
          * @private
          */
-        this._initGalleryOverlay = function (data) {
-            if (this.gallery && data) {
-                var preview = this.gallery.querySelector('.gallery-overlay-image');
-                var likes = this.gallery.querySelector('.likes-count');
-                var comments = this.gallery.querySelector('.comments-count');
+        function _initGalleryOverlay (data) {
+            if (gallery && data) {
+                var preview = gallery.querySelector('.gallery-overlay-image');
+                var likes = gallery.querySelector('.likes-count');
+                var comments = gallery.querySelector('.comments-count');
 
                 if (preview && likes && comments) {
                     preview.setAttribute('src', data.url);
@@ -49,11 +49,11 @@
          * Метод, удаляющий обработчики на галлереи при закрытии
          * @private
          */
-        this._removeEventsFromGallery = function () {
-            document.removeEventListener('keydown', this._onEscCloseGallery.bind(this));
+        function _removeEventsFromGallery () {
+            document.removeEventListener('keydown', _onEscCloseGallery);
 
-            if (this.closeButton) {
-                this.closeButton.removeEventListener('click', this._onButtonCloseGalleryClick.bind(this));
+            if (closeButton) {
+                closeButton.removeEventListener('click', _onButtonCloseGalleryClick);
             }
         }
 
@@ -61,11 +61,11 @@
          * Метод, закрывающий галлерею
          * @private
          */
-        this._hideGallery = function () {
-            if (this.gallery) {
-                this.gallery.classList.add('hidden');
-                this._removeEventsFromGallery();
-                this._initEventsOnPictures();
+        function _hideGallery () {
+            if (gallery) {
+                gallery.classList.add('hidden');
+                _removeEventsFromGallery();
+                _initEventsOnPictures();
             }
         }
 
@@ -73,8 +73,8 @@
          * Метод, закрытие галлереи по клику на крестик
          * @private
          */
-        this._onButtonCloseGalleryClick = function () {
-            this._hideGallery();
+        function _onButtonCloseGalleryClick () {
+            _hideGallery();
         }
 
         /**
@@ -82,9 +82,9 @@
          * @event e
          * @private
          */
-        this._onEscCloseGallery = function (e) {
-            if (e.keyCode === util.keyCode.esc) {
-                this._hideGallery();
+        function _onEscCloseGallery (e) {
+            if (e.keyCode === util.keyCode.ESC) {
+                _hideGallery();
             }
         }
 
@@ -92,14 +92,14 @@
          * Метод, добавляющий обработчики для галлереи
          * @private
          */
-        this._initEventsOnGallery = function () {
-            if (this.closeButton) {
-                this.closeButton.addEventListener('click', this._onButtonCloseGalleryClick.bind(this));
+        function _initEventsOnGallery () {
+            if (closeButton) {
+                closeButton.addEventListener('click', _onButtonCloseGalleryClick);
+                document.addEventListener('keydown', _onEscCloseGallery);
 
-                if (this.picturesWrap) {
-                    this.picturesWrap.removeEventListener('click', this._onPicturesClick.bind(this));
-                    this.picturesWrap.removeEventListener('keydown', this._onPictureFocus.bind(this));
-                    document.addEventListener('keydown', this._onEscCloseGallery.bind(this));
+                if (picturesWrap) {
+                    picturesWrap.removeEventListener('click', _onPicturesClick);
+                    picturesWrap.removeEventListener('keydown', _onPictureFocus);
                 }
             }
         }
@@ -107,10 +107,10 @@
         /**
          * Метод, показывающий галлерею
          */
-        this._showGallery = function () {
-            if (this.gallery) {
-                this.gallery.classList.remove('hidden');
-                this._initEventsOnGallery();
+        function _showGallery () {
+            if (gallery) {
+                gallery.classList.remove('hidden');
+                _initEventsOnGallery();
             }
         }
 
@@ -118,7 +118,7 @@
          * Метод, открыввающий картинку с нужными данными
          * @param target цель - выбранная картинка
          */
-        this._openPicture = function (target) {
+        function _openPicture (target) {
             var obj = null;
 
             if (target.nodeName === 'IMG' && target.parentNode.className === 'picture') {
@@ -138,8 +138,8 @@
                     comments: comments
                 };
 
-                this._initGalleryOverlay(data);
-                this._showGallery();
+                _initGalleryOverlay(data);
+                _showGallery();
             }
         }
 
@@ -148,12 +148,12 @@
          * @event e
          * @private
          */
-        this._onPicturesClick = function (e) {
+        function _onPicturesClick (e) {
             e.preventDefault();
 
             var target = e.target;
 
-            this._openPicture(target);
+            _openPicture(target);
         }
 
         /**
@@ -161,13 +161,13 @@
          * @event e
          * @private
          */
-        this._onPictureFocus = function (e) {
-            if (e.keyCode === util.keyCode.enter) {
+        function _onPictureFocus (e) {
+            if (e.keyCode === util.keyCode.ENTER) {
                 e.preventDefault();
 
                 var focusTarget = e.target;
 
-                this._openPicture(focusTarget);
+                _openPicture(focusTarget);
             }
         }
 
@@ -175,16 +175,16 @@
          * Метод, добавляющий обработчики на картинки
          * @private
          */
-        this._initEventsOnPictures = function () {
-            this.picturesWrap = document.querySelector('.pictures');
+        function _initEventsOnPictures () {
+            picturesWrap = document.querySelector('.pictures');
 
-            if (this.picturesWrap) {
-                this.picturesWrap.addEventListener('click', this._onPicturesClick.bind());
-                this.picturesWrap.addEventListener('keydown', this._onPictureFocus.bind(this));
+            if (picturesWrap) {
+                picturesWrap.addEventListener('click', _onPicturesClick);
+                picturesWrap.addEventListener('keydown', _onPictureFocus);
             }
         }
 
-        this._initEventsOnPictures();
+        _initEventsOnPictures();
     }
 
     window.Gallery = Gallery;

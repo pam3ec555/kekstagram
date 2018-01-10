@@ -5,7 +5,7 @@
     /**
      * @constructor
      */
-    var Data = function() {
+    var Data = function () {
         /**
          * Метод, отрисовывющий фотографии
          * @param obj DOM - элемент, на котором будет отображаться картинка
@@ -13,15 +13,17 @@
          * @returns {*} Готовый DOM - элемент
          * @private
          */
-        this._initPictures = function (obj, data) {
-            var img = obj.querySelector('img');
-            var likes = obj.querySelector('.picture-likes');
-            var comment = obj.querySelector('.picture-comments');
+        function _initPictures (obj, data) {
+            if (obj && data) {
+                var img = obj.querySelector('img');
+                var likes = obj.querySelector('.picture-likes');
+                var comment = obj.querySelector('.picture-comments');
 
-            img.setAttribute('src', data.url);
-            likes.textContent = data.likes;
-            comment.textContent = data['comments'].length;
-            obj.setAttribute('tabindex', 0);
+                img.setAttribute('src', data.url);
+                likes.textContent = data.likes;
+                comment.textContent = data['comments'].length;
+                obj.setAttribute('tabindex', 0);
+            }
 
             return obj;
         }
@@ -31,7 +33,7 @@
          * @param pictures {Array} данные о картинках
          * @private
          */
-        this._drawPicturesContent = function (pictures) {
+        function _drawPicturesContent (pictures) {
             var pictureTemplate = document.querySelector('#picture-template').content.querySelector('.picture');
             var picturesBlock = document.querySelector('.pictures');
 
@@ -41,7 +43,7 @@
                 pictures.forEach(function(item) {
                     var obj = pictureTemplate.cloneNode(true);
 
-                    fragment.appendChild(this._initPictures(obj, item));
+                    fragment.appendChild( _initPictures(obj, item));
                 }.bind(this));
 
                 picturesBlock.appendChild(fragment);
@@ -53,10 +55,10 @@
          * @param data ответ
          * @private
          */
-        this._onSuccess = function (data) {
+        function _onSuccess (data) {
             var obj = JSON.parse(data.responseText);
 
-            this._drawPicturesContent(obj);
+             _drawPicturesContent(obj);
             new Gallery();
         }
 
@@ -65,9 +67,9 @@
          * @event e
          * @private
          */
-        this._onLoadXhr = function (e) {
+        function _onLoadXhr (e) {
             try {
-                this._onSuccess(e.target);
+                 _onSuccess(e.target);
             } catch (error) {
                 alert('Не удалось загрузить данные.');
                 console.log(error.message);
@@ -78,16 +80,16 @@
          * Метод, отправляющий запрос на получение данных о картинках
          * @private
          */
-        this._getData = function () {
+        function _getData () {
             var xhr = new XMLHttpRequest();
 
             xhr.open('GET', 'data/data.json');
             xhr.send();
 
-            xhr.addEventListener('load', this._onLoadXhr.bind(this));
+            xhr.addEventListener('load',  _onLoadXhr.bind(this));
         }
 
-        this._getData();
+         _getData();
     }
 
     window.Data = Data;

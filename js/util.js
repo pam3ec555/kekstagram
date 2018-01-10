@@ -39,8 +39,8 @@
     }
 
     Util.prototype.keyCode = {
-        enter: 13,
-        esc: 27
+        ENTER: 13,
+        ESC: 27
     }
 
     window.Util = Util;

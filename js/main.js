@@ -3,5 +3,6 @@
 (function () {
 
     new Data();
+    new Overlay();
 
 })();
