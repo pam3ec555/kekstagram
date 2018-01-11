@@ -1,43 +1,50 @@
 'use strict';
 
 (function() {
+    /**
+     * @constructor
+     */
+    var PreviewResize = function () {
+        
+    };
 
-    window.resizeUploadPreview = {
-        /**
-         * Метод, инициализирующий события для масштаблирования preview
-         * @param uploadOverlay
-         */
-        initControlsResizePhoto: function (uploadOverlay) {
-            var controls = uploadOverlay.querySelector('.upload-resize-controls');
+    /**
+     * Метод, инициализирующий события для масштаблирования preview
+     * @param uploadOverlay
+     */
+    PreviewResize.prototype.initControlsResizePhoto = function (uploadOverlay) {
+        var controls = uploadOverlay.querySelector('.upload-resize-controls');
 
-            if (controls) {
-                controls.addEventListener('click', window.resizeUploadPreview.onResizePhotoControlClick);
-            }
-        },
-        /**
-         * Метод, клик по кнопкам масштаблирования preview
-         * @param e {Event}
-         */
-        onResizePhotoControlClick: function (e) {
-            var target = e.target;
-
-            if (target.classList.contains('upload-resize-controls-button')) {
-                resizePreview(target);
-            }
+        if (controls) {
+            controls.addEventListener('click', this.onResizePhotoControlClick);
         }
     };
+
+    /**
+     * Метод, клик по кнопкам масштаблирования preview
+     * @event e
+     */
+    PreviewResize.prototype.onResizePhotoControlClick = function (e) {
+        var target = e.target;
+
+        if (target.classList.contains('upload-resize-controls-button')) {
+            _resizePreview(target);
+        }
+    };
+
+    var util = new Util();
 
     /**
      * Метод, изменяющий масштаб preview и значения поля масштабирования.
      * Минимальное значение поля 25%, максимальное 100%
      * @param obj Цель - кнопка увеличения или уменьшения
      */
-    function resizePreview(obj) {
+    function _resizePreview(obj) {
         var controlInput = document.querySelector('.upload-resize-controls-value');
         var preview = document.querySelector('.effect-image-preview');
 
         if (controlInput && preview) {
-            var controlVal = parseInt(window.util.getIntFromString(controlInput.value));
+            var controlVal = parseInt(util.getIntFromString(controlInput.value));
 
             if (controlVal) {
                 if (obj.classList.contains('upload-resize-controls-button-inc')) {
@@ -59,5 +66,7 @@
             }
         }
     }
+
+    window.PreviewResize = PreviewResize;
 
 })();

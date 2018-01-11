@@ -1,6 +1,96 @@
 'use strict';
 
 (function () {
+    /**
+     * @constructor
+     */
+    var EffectRangeControl = function () {
+        /**
+         * Объект, хранящий состояние фильтров
+         * @type {Object}
+         */
+        this.filterRange = new Object();
+    };
+
+    /**
+     * Метод, инициализирующий обработку событий на ползунке для фильтра
+     * @param uploadOverlay
+     */
+    EffectRangeControl.prototype.initDragControl = function (uploadOverlay) {
+        var controlPin = uploadOverlay.querySelector('#effect-range');
+
+        if (controlPin) {
+            controlPin.addEventListener('input', this.onPinControlRange.bind(this));
+        }
+    };
+
+    /**
+     * Метод, срабатывающий при изменении состоянии ползунка
+     * @event e
+     */
+    EffectRangeControl.prototype.onPinControlRange = function (e) {
+        _setFilter(e.target, this.getFilterRange());
+    };
+
+    /**
+     * Метод, устанавливающий нужное состояние для фильтров, в зависимости от выбранного фильтра
+     * @param {string} className Имя класса выбранного фильтра
+     */
+    EffectRangeControl.prototype.setMinMaxEffectSize = function (className) {
+        var obj = new Object();
+        var pin = document.querySelector('#effect-range');
+
+        pin.value = 30;
+
+        if (className.indexOf('effect-chrome') + 1) {
+            obj['min'] = 0;
+            obj['max'] = 1;
+            obj['unit'] = '';
+            obj['type'] = 'grayscale';
+        } else if (className.indexOf('effect-sepia') + 1) {
+            obj['min'] = 0;
+            obj['max'] = 1;
+            obj['unit'] = '';
+            obj['type'] = 'sepia';
+        } else if (className.indexOf('effect-marvin') + 1) {
+            obj['min'] = 0;
+            obj['max'] = 100;
+            obj['unit'] = '%';
+            obj['type'] = 'invert';
+        } else if (className.indexOf('effect-phobos') + 1) {
+            obj['min'] = 0;
+            obj['max'] = 3;
+            obj['unit'] = 'px';
+            obj['type'] = 'blur';
+        } else if (className.indexOf('effect-heat') + 1) {
+            obj['min'] = 0;
+            obj['max'] = 3;
+            obj['unit'] = '';
+            obj['type'] = 'brightness';
+        } else {
+            obj = {};
+        }
+
+        this.setFilterRange(obj);
+
+        _setFilter(pin, this.getFilterRange());
+    };
+
+    /**
+     * Метод, получающий значение filterRange
+     * @returns {Object}
+     */
+    EffectRangeControl.prototype.getFilterRange = function () {
+        return this.filterRange;
+    };
+
+    /**
+     * Метод, устанавливающий значение filterRange
+     * @param val {Object}
+     */
+    EffectRangeControl.prototype.setFilterRange = function (val) {
+        this.filterRange = val;
+    };
 
     /**
      * Максимальное значени ползунка
@@ -8,96 +98,34 @@
      * @const
      */
     var MAX_RANGE_VALUE = 100;
-    
-    window.filterDragUploadPreview = {
-        /**
-         * {{}} Объект, хранящий состояние фильтров
-         */
-        filterRange: {},
-        /**
-         * Метод, инициализирующий обработку событий на ползунке для фильтра
-         * @param uploadOverlay
-         */
-        initDragControl: function (uploadOverlay) {
-            var controlPin = uploadOverlay.querySelector('#effect-range');
-
-            if (controlPin) {
-                controlPin.addEventListener('input', window.filterDragUploadPreview.onPinControlRange);
-            }
-        },
-        /**
-         * Метод, срабатывающий при изменении состоянии ползунка
-         * @param e {Event}
-         */
-        onPinControlRange: function (e) {
-            setFilter(e.target);
-        },
-        /**
-         * Метод, устанавливающий нужное состояние для фильтров, в зависимости от выбранного фильтра
-         * @param {string} className Имя класса выбранного фильтра
-         */
-        setMinMaxEffectSize: function (className) {
-            var filterDrag = window.filterDragUploadPreview;
-            var pin = document.querySelector('#effect-range');
-
-            pin.value = 30;
-
-            if (className.indexOf('effect-chrome') + 1) {
-                filterDrag.filterRange['min'] = 0;
-                filterDrag.filterRange['max'] = 1;
-                filterDrag.filterRange['unit'] = '';
-                filterDrag.filterRange['type'] = 'grayscale';
-            } else if (className.indexOf('effect-sepia') + 1) {
-                filterDrag.filterRange['min'] = 0;
-                filterDrag.filterRange['max'] = 1;
-                filterDrag.filterRange['unit'] = '';
-                filterDrag.filterRange['type'] = 'sepia';
-            } else if (className.indexOf('effect-marvin') + 1) {
-                filterDrag.filterRange['min'] = 0;
-                filterDrag.filterRange['max'] = 100;
-                filterDrag.filterRange['unit'] = '%';
-                filterDrag.filterRange['type'] = 'invert';
-            } else if (className.indexOf('effect-phobos') + 1) {
-                filterDrag.filterRange['min'] = 0;
-                filterDrag.filterRange['max'] = 3;
-                filterDrag.filterRange['unit'] = 'px';
-                filterDrag.filterRange['type'] = 'blur';
-            } else if (className.indexOf('effect-heat') + 1) {
-                filterDrag.filterRange['min'] = 0;
-                filterDrag.filterRange['max'] = 3;
-                filterDrag.filterRange['unit'] = '';
-                filterDrag.filterRange['type'] = 'brightness';
-            } else {
-                filterDrag.filterRange = {};
-            }
-
-            setFilter(pin);
-        }
-    };
 
     /**
      * Метод, устанавливающий нужный эффект в зависимости от состояния ползунка
      * @param pin Ползунок
+     * @param filterDrag {Object}
+     * @private
      */
-    function setFilter(pin) {
+    function _setFilter(pin, filterDrag) {
         var preview = document.querySelector('.effect-image-preview');
-        var filterDrag = window.filterDragUploadPreview;
+        console.log(filterDrag);
 
-        if (preview && Object.keys(filterDrag.filterRange).length !== 0) {
-            var step = filterDrag.filterRange['max'] / MAX_RANGE_VALUE;
+        if (preview && Object.keys(filterDrag).length !== 0) {
+            var step = filterDrag['max'] / MAX_RANGE_VALUE;
             var val = pin.value * step;
 
             if (pin.disabled) {
                 pin.disabled = false;
             }
 
-            preview.style.filter = filterDrag.filterRange['type'] + '(' + val + filterDrag.filterRange['unit'] + ')';
-        } else if (Object.keys(filterDrag.filterRange).length === 0) {
+            preview.style.filter = filterDrag['type'] + '(' + val + filterDrag['unit'] + ')';
+        } else if (Object.keys(filterDrag).length === 0) {
             preview.style.filter = '';
             if (!pin.disabled) {
                 pin.disabled = true;
             }
         }
     }
+
+    window.EffectRangeControl = EffectRangeControl;
     
 })();
