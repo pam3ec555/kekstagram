@@ -43,11 +43,27 @@
      * @param uploadOverlay
      */
     EffectControl.prototype.initUploadPhotoControls = function (uploadOverlay) {
-        var controls = uploadOverlay.querySelector('.upload-effect-controls');
+        var control = uploadOverlay.querySelector('.upload-effect-controls');
 
-        if (controls) {
-            controls.addEventListener('click', this.onEffectPhotoControlClick);
+        if (control) {
+            control.addEventListener('click', this.onEffectPhotoControlClick);
         }
+
+        effectRangeControl.initDragControl();
+    };
+
+    /**
+     * Метод, деинициализирующий события по изменению эффектов картинки по контролам
+     * @param uploadOverlay
+     */
+    EffectControl.prototype.deInitUploadPhotoControls = function (uploadOverlay) {
+        var control = uploadOverlay.querySelector('.upload-effect-controls');
+
+        if (control) {
+            control.removeEventListener('click', this.onEffectPhotoControlClick);
+        }
+
+        effectRangeControl.deInitDragControl();
     };
 
     /**

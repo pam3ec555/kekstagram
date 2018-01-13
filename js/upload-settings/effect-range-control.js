@@ -10,17 +10,31 @@
          * @type {Object}
          */
         this.filterRange = new Object();
+
+        // Создание метода с привязкой, для установки и удаления одного и того же события
+        this.onPinControlRangeBind = _onPinControlRange.bind(this);
     };
 
     /**
      * Метод, инициализирующий обработку событий на ползунке для фильтра
-     * @param uploadOverlay
      */
-    EffectRangeControl.prototype.initDragControl = function (uploadOverlay) {
-        var controlPin = uploadOverlay.querySelector('#effect-range');
+    EffectRangeControl.prototype.initDragControl = function () {
+        var controlPin = document.querySelector('#effect-range');
 
         if (controlPin) {
-            controlPin.addEventListener('input', this.onPinControlRange.bind(this));
+            controlPin.addEventListener('input', this.onPinControlRangeBind);
+        }
+    };
+
+    /**
+     * Метод, деинициализирующий обработку событий на ползунке для фильтра
+     */
+    EffectRangeControl.prototype.deInitDragControl = function () {
+        var controlPin = document.querySelector('#effect-range');
+
+        if (controlPin) {
+            console.log(this);
+            controlPin.removeEventListener('input', this.onPinControlRangeBind);
         }
     };
 
@@ -71,25 +85,9 @@
             obj = {};
         }
 
-        this.setFilterRange(obj);
+        this.filterRange = obj;
 
-        _setFilter(pin, this.getFilterRange());
-    };
-
-    /**
-     * Метод, получающий значение filterRange
-     * @returns {Object}
-     */
-    EffectRangeControl.prototype.getFilterRange = function () {
-        return this.filterRange;
-    };
-
-    /**
-     * Метод, устанавливающий значение filterRange
-     * @param val {Object}
-     */
-    EffectRangeControl.prototype.setFilterRange = function (val) {
-        this.filterRange = val;
+        _setFilter(pin, this.filterRange);
     };
 
     /**
@@ -124,6 +122,15 @@
                 pin.disabled = true;
             }
         }
+    }
+
+    /**
+     * Метод, срабатывающий при изменении состоянии ползунка
+     * @event e
+     * @private
+     */
+    function _onPinControlRange(e) {
+        _setFilter(e.target, this.filterRange);
     }
 
     window.EffectRangeControl = EffectRangeControl;

@@ -13,12 +13,24 @@
      * @param uploadOverlay
      */
     PreviewResize.prototype.initControlsResizePhoto = function (uploadOverlay) {
-        var controls = uploadOverlay.querySelector('.upload-resize-controls');
+        var control = uploadOverlay.querySelector('.upload-resize-controls');
 
-        if (controls) {
-            controls.addEventListener('click', this.onResizePhotoControlClick);
+        if (control) {
+            control.addEventListener('click', this.onResizePhotoControlClick);
         }
     };
+
+    /**
+     * Метод, деинициализирующий события для масштаблирования preview
+     * @param uploadOverlay
+     */
+    PreviewResize.prototype.deInitControlResizePhoto = function (uploadOverlay) {
+        var control = uploadOverlay.querySelector('.upload-resize-controls');
+
+        if (control) {
+            control.removeEventListener('click', this.onResizePhotoControlClick);
+        }
+    }
 
     /**
      * Метод, клик по кнопкам масштаблирования preview

@@ -10,7 +10,6 @@
 
     var util = new Util();
     var effectControl = new EffectControl();
-    var effectRangeControl = new EffectRangeControl();
     var previewResize = new PreviewResize();
     var hashField = new HashField();
 
@@ -54,7 +53,7 @@
     function _initUploadOverlay(uploadOverlay) {
         var closeButton = uploadOverlay.querySelector('.upload-form-cancel');
 
-        effectRangeControl.initDragControl(uploadOverlay);
+        _setPreviewImage(uploadOverlay);
         effectControl.initUploadPhotoControls(uploadOverlay);
         previewResize.initControlsResizePhoto(uploadOverlay);
         hashField.initCheckHashField(uploadOverlay);
@@ -67,6 +66,49 @@
 
             if (file) {
                 file.removeEventListener('change', _onUploadPictureChange);
+            }
+        }
+    }
+
+    function _setPreviewImage(uploadOverlay) {
+        var FILE_TYPES = ['.png', '.jpg', '.jpeg', '.gif'];
+        var preview = uploadOverlay.querySelector('.effect-image-preview');
+        var fileField = document.querySelector('#upload-file');
+        var previewWrap = uploadOverlay.querySelector('.upload-form-preview');
+
+        if (fileField && preview && previewWrap) {
+            var file = fileField.files[0];
+
+            preview.classList.add('hidden');
+            previewWrap.classList.add('preview-preloader');
+
+            if (file) {
+                var fileName = file.name.toLowerCase();
+                var isImage = FILE_TYPES.some(function (value) {
+                    return fileName.endsWith(value);
+                });
+
+                if (isImage) {
+                    var reader = new FileReader();
+
+                    console.log(reader);
+
+                    reader.addEventListener('load', function () {
+                        preview.src = reader.result;
+                        preview.classList.remove('hidden');
+                        previewWrap.classList.remove('preview-preloader');
+                    });
+
+                    reader.addEventListener('error', function () {
+                        previewWrap.classList.add('preview-preloader--error');
+                    });
+
+                    reader.readAsDataURL(file);
+                } else {
+                    previewWrap.classList.add('preview-preloader--error');
+                }
+            } else {
+                previewWrap.classList.add('preview-preloader--error');
             }
         }
     }
@@ -119,26 +161,10 @@
      */
     function _removeUploadPictureEvents(uploadOverlay) {
         var closeButton = uploadOverlay.querySelector('.upload-form-cancel');
-        var effectControls = uploadOverlay.querySelector('.upload-effect-controls');
-        var resizeControls = uploadOverlay.querySelector('.upload-resize-controls');
-        var hashFieldInput = uploadOverlay.querySelector('.upload-form-hashtags');
-        var pinControl = uploadOverlay.querySelector('#effect-range');
 
-        if (pinControl) {
-            pinControl.removeEventListener('input', effectRangeControl.onPinControlRange);
-        }
-
-        if (hashFieldInput) {
-            hashFieldInput.removeEventListener('change', hashField.checkHashField);
-        }
-
-        if (effectControls) {
-            effectControls.removeEventListener('click', effectControl.onEffectPhotoControlClick);
-        }
-
-        if (resizeControls) {
-            resizeControls.removeEventListener('click', previewResize.onResizePhotoControlClick);
-        }
+        hashField.deInitCheckHashField(uploadOverlay);
+        effectControl.deInitUploadPhotoControls(uploadOverlay);
+        previewResize.deInitControlResizePhoto(uploadOverlay);
 
         if (closeButton) {
             closeButton.removeEventListener('click', _onCloseUploadClick);

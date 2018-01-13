@@ -121,6 +121,45 @@ body {
   background-repeat: no-repeat;
 }
 
+.upload-form-preview {
+  width: 100%;
+  min-height: 500px;
+}
+
+.preview-preloader {
+  position: relative;
+}
+
+.preview-preloader::before {
+  content: '';
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin-left: -32px;
+  margin-top: -32px;
+
+  background-image: url('../img/preloader.gif');
+}
+
+.preview-preloader--error::before {
+  content: 'Ошибка загрузки';
+
+  left: 0;
+
+  width: 100%;
+  margin: 0;
+
+  font-size: 20px;
+  text-align: center;
+
+  background-image: url('');
+}
+
 .upload-effect-label-chrome .upload-effect-preview,
 .effect-chrome {
   -webkit-filter: grayscale(1);
@@ -292,6 +331,9 @@ body {
 }
 
 .effect-image-preview {
+  width: 100%;
+  max-height: 700px;
+
   vertical-align: middle;
 
   transform: scale(0.55);

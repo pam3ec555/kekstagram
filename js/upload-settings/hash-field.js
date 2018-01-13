@@ -23,6 +23,18 @@
     };
 
     /**
+     * Метод, деинициализирующий события для проверки хэша
+     * @param uploadOverlay
+     */
+    HashField.prototype.deInitCheckHashField = function (uploadOverlay) {
+        var hashField = uploadOverlay.querySelector('.upload-form-hashtags');
+
+        if (hashField) {
+            hashField.removeEventListener('change', this.checkHashField);
+        }
+    };
+
+    /**
      * Метод, проверяющий валидацию поля с вводом хэшей
      * @event e
      */
